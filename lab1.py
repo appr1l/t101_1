@@ -8,7 +8,12 @@ def executor(rules):
     Keyword arguments:
 	rules (list of dict): dictionary of rules
     """
-    pass
+    # 1. если условия совпадают на разных/тех же опператорах
+    for rule in reversed(rules):
+        for ind_rule in range(len(rules)-1):
+            if rule['if'].values():
+                pass
+
 
 def reshala(rules, facts):
     """Summary
@@ -50,15 +55,14 @@ def reshala(rules, facts):
 
     for rule in rules:
     	#print(rule.get('then'))
-    	operator = list(rule.get('if').keys())[0] # забираем логический ключ операции
     	rule_list = list(rule.get('if').values())[0] # забираем список значений
-    	if operator == 'and':
+    	if 'and' in rule.get('if'):
     		if _and(rule_list, facts): # дохуярить list values
     			result_list.append(rule.get('then'))
-    	if operator == 'not':
+    	if 'not' in rule.get('if'):
     		if _not(rule_list, facts): # дохуярить list values
     			result_list.append(rule.get('then'))
-    	if operator == 'or':
+    	if 'or' in rule.get('if'):
     		if _or(rule_list, facts): # дохуярить list values
     			result_list.append(rule.get('then'))
 
@@ -66,16 +70,12 @@ def reshala(rules, facts):
 
 
 def main():
-	time_start = time()
-	rules = ge.generate_simple_rules(100,4,1000)
-	facts = ge.generate_rand_facts(100,100000)
-	reshala(rules,facts)
-	print(f"rules generated in {time()-time_start} seconds")
-	#print(len(rules))
-	# print(list(rules[0].get('if').keys())[0])
-	# print(list(rules[0].get('if').values())[0])
-	# print(rules[0].get('then'))
-	# print(facts)
-
+	#time_start = time()
+    rules = ge.generate_simple_rules(100,4,10)
+    facts = ge.generate_rand_facts(100,100000)
+    print(sorted(list(rules[0]['if'].values())[0]) == sorted(list(rules[0]['if'].values())[0]) )
+    #print(facts)
+    print(reshala(rules,facts))
+    
 if __name__=='__main__':
 	main()
