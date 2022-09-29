@@ -95,7 +95,6 @@ def main():
     """
     #SIMP RULES RAND FACTS
     rules = ge.generate_simple_rules(10000, 10, 100000)
-    print(rules)
     facts = ge.generate_rand_facts(10000, 10000)
     rules_list = update_rules(rules)
     facts_dict = update_facts(facts)
