@@ -2,9 +2,25 @@
 """1 лабораторка.
 """
 
-#from time import time
+import functools
+import time
 import generate_and_evaluate as ge
 
+def timer(func):
+    """Таймер выполнения фунцкии
+        Args:
+            func (func): Фунция, которую мерим
+         Returns:
+            String: Строка с временем выполнения
+    """
+    @functools.wraps(func)
+    def _wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        result = func(*args, **kwargs)
+        runtime = time.perf_counter() - start
+        print(f"{func.__name__} took {runtime:.4f} secs")
+        return result
+    return _wrapper
 
 def update_rules(rules):
     """Removes conflicting rules.
@@ -38,7 +54,7 @@ def update_facts(facts):
             facts_dict[fact] = True
     return facts_dict
 
-
+@timer
 def reshala(rules_list, facts_dict):
     """Summary
         Args:
@@ -71,19 +87,36 @@ def reshala(rules_list, facts_dict):
                 break
             if facts_dict.get(rule[1]) is None:
                 facts_dict[rule[1]] = True
+    return ''
 
 
 def main():
     """Main
     """
-    #time_start = time()
-    rules = ge.generate_simple_rules(100, 4, 10)
-    facts = ge.generate_rand_facts(100, 100)
+    #SIMP RULES RAND FACTS
+    rules = ge.generate_simple_rules(10000, 10, 100000)
+    facts = ge.generate_rand_facts(10000, 10000)
     rules_list = update_rules(rules)
     facts_dict = update_facts(facts)
-    print(len(facts_dict))
-    reshala(rules_list, facts_dict)
-    print(len(facts_dict))
+    print(f'{reshala(rules_list, facts_dict)} SIMP RULES RAND FACTS')
+    #STAIRWAY RULES, RAND FACTS
+    rules = ge.generate_stairway_rules(10000, 10, 100000)
+    facts = ge.generate_rand_facts(10000, 10000)
+    rules_list = update_rules(rules)
+    facts_dict = update_facts(facts)
+    print(f'{reshala(rules_list, facts_dict)} STAIRWAY RULES RAND FACTS')
+    #RING RULES, RAND FACTS
+    rules = ge.generate_ring_rules(10000, 10, 100000)
+    facts = ge.generate_rand_facts(10000, 10000)
+    rules_list = update_rules(rules)
+    facts_dict = update_facts(facts)
+    print(f'{reshala(rules_list, facts_dict)} RING RULES RAND FACTS')
+    #RANDOM RULES, RAND FACTS
+    rules = ge.generate_random_rules(10000, 10, 100000)
+    facts = ge.generate_rand_facts(10000, 10000)
+    rules_list = update_rules(rules)
+    facts_dict = update_facts(facts)
+    print(f'{reshala(rules_list, facts_dict)} RAND RULES RAND FACTS')
 
 if __name__ == '__main__':
     main()
